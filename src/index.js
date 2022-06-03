@@ -1,3 +1,4 @@
+import { authWithEmailAndPassword, getAuthForm } from "./auth";
 import { Question } from "./question";
 import css from "./styles.css";
 import { isValid } from "./utils";
@@ -42,5 +43,22 @@ function submitFormHandler(event) {
 }
 
 function openModal() {
-    createModal("Авторизация", `<h1>Test</h1>`);
+    createModal("Авторизация", getAuthForm());
+    document
+        .getElementById("auth-form")
+        .addEventListener("submit", authFormHandler, { once: true });
+}
+
+function authFormHandler(event) {
+    event.preventDefault();
+    const email = event.target.querySelector("#email").value;
+    const password = event.target.querySelector("#password").value;
+
+    authWithEmailAndPassword(email, password)
+        .then(Question.fetch)
+        .then(renderModalAfterAuth);
+}
+
+function renderModalAfterAuth(content) {
+    console.log("Content", content);
 }

@@ -1,7 +1,7 @@
 export class Question {
     static create(question) {
         return fetch(
-                "https://podcast--app-8f225-default-rtdb.firebaseio.com/question.json", {
+                "https://podcast--app-8f225-default-rtdb.firebaseio.com/questions.json", {
                     method: "POST",
                     body: JSON.stringify(question),
                     headers: {
@@ -17,6 +17,22 @@ export class Question {
             })
             .then(addToLocalStorage)
             .then(Question.renderList);
+    }
+
+    static fetch(token) {
+        //return console.log("Token", token);
+
+        if (!token) {
+            return Promise.resolve(`< p class = "error" > У вас нет токена < /p>`);
+        }
+
+        return fetch(
+                `https://podcast--app-8f225-default-rtdb.firebaseio.com/questions.json?auth=${token}`
+            )
+            .then((response) => response.json())
+            .then((questions) => {
+                return console.log("Questions", questions);
+            });
     }
 
     static renderList() {
